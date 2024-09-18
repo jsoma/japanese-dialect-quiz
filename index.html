@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本語方言クイズ</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div id="root"></div>
+
+    <script type="text/babel">
+const quizData = [
+  {
+    question: "「ありがとう」をどう言いますか？",
+    options: [
+      { text: "ありがとう", region: "標準語", explanation: "標準的な「ありがとう」の言い方です。" },
+      { text: "おおきに", region: "関西弁", explanation: "関西地方で使われる「ありがとう」の表現です。" },
+      { text: "ありがとす", region: "東北弁", explanation: "東北地方で使われることがある「ありがとう」の変形です。" },
+      { text: "にふぇーでーびる", region: "沖縄弁", explanation: "沖縄で使われる「ありがとうございます」の表現です。" },
+      { text: "だんだん", region: "九州弁", explanation: "熊本を中心とした九州地方で使われる「ありがとう」の表現です。" },
+    ],
+  },
+  {
+    question: "「美味しい」をどう言いますか？",
+    options: [
+      { text: "おいしい", region: "標準語", explanation: "標準的な「美味しい」の言い方です。" },
+      { text: "うまい", region: "関西弁", explanation: "関西地方でよく使われる「美味しい」の表現です。" },
+      { text: "まんま", region: "東北弁", explanation: "東北地方の一部で使われる「美味しい」の方言です。" },
+      { text: "あじょーし", region: "沖縄弁", explanation: "沖縄で使われる「美味しい」の表現です。" },
+      { text: "うまか", region: "九州弁", explanation: "九州地方、特に熊本で使われる「美味しい」の表現です。" },
+    ],
+  },
+  {
+    question: "「疲れた」をどう言いますか？",
+    options: [
+      { text: "つかれた", region: "標準語", explanation: "標準的な「疲れた」の言い方です。" },
+      { text: "しんど", region: "関西弁", explanation: "関西地方でよく使われる「疲れた」の表現です。" },
+      { text: "へばった", region: "東北弁", explanation: "東北地方で使われる「疲れた」の方言です。" },
+      { text: "ぐたびちゃー", region: "沖縄弁", explanation: "沖縄で使われる「疲れた」の表現です。" },
+      { text: "だるか", region: "九州弁", explanation: "九州地方の一部で使われる「疲れた」の表現です。" },
+    ],
+  },
+  {
+    question: "「かわいい」をどう言いますか？",
+    options: [
+      { text: "かわいい", region: "標準語", explanation: "標準的な「かわいい」の言い方です。" },
+      { text: "めんこい", region: "東北弁", explanation: "東北地方で使われる「かわいい」の方言です。" },
+      { text: "ちゅらかーぎー", region: "沖縄弁", explanation: "沖縄で使われる「かわいい」の表現です。" },
+      { text: "おおきに", region: "関西弁", explanation: "関西地方で使われる「かわいい」の表現の一つです。" },
+      { text: "しわしわ", region: "九州弁", explanation: "鹿児島を中心とした九州南部で使われる「かわいい」の表現です。" },
+    ],
+  },
+  {
+    question: "「びっくりした」をどう言いますか？",
+    options: [
+      { text: "びっくりした", region: "標準語", explanation: "標準的な「びっくりした」の言い方です。" },
+      { text: "がびーん", region: "関西弁", explanation: "関西地方で使われる「びっくりした」の表現です。" },
+      { text: "どぎもをぬかれた", region: "東北弁", explanation: "東北地方で使われる「びっくりした」の表現です。" },
+      { text: "あたふたしー", region: "沖縄弁", explanation: "沖縄で使われる「びっくりした」の表現です。" },
+      { text: "ぎゃんばった", region: "九州弁", explanation: "熊本を中心とした九州地方で使われる「びっくりした」の表現です。" },
+    ],
+  },
+  {
+    question: "「さようなら」をどう言いますか？",
+    options: [
+      { text: "さようなら", region: "標準語", explanation: "標準的な「さようなら」の言い方です。" },
+      { text: "ほなさいなら", region: "関西弁", explanation: "関西地方で使われる「さようなら」の表現です。" },
+      { text: "ぼっけだのー", region: "東北弁", explanation: "秋田で使われる「さようなら」の方言です。" },
+      { text: "めんそーれー", region: "沖縄弁", explanation: "沖縄で使われる「さようなら」の表現です。" },
+      { text: "さいなら", region: "九州弁", explanation: "九州地方で使われる「さようなら」の簡略化された表現です。" },
+    ],
+  },
+  {
+    question: "「たくさん」をどう言いますか？",
+    options: [
+      { text: "たくさん", region: "標準語", explanation: "標準的な「たくさん」の言い方です。" },
+      { text: "ようけ", region: "関西弁", explanation: "関西地方で使われる「たくさん」の表現です。" },
+      { text: "がっぱ", region: "東北弁", explanation: "東北地方で使われる「たくさん」の方言です。" },
+      { text: "ふさふさ", region: "沖縄弁", explanation: "沖縄で使われる「たくさん」の表現です。" },
+      { text: "やっと", region: "九州弁", explanation: "熊本を中心とした九州地方で使われる「たくさん」の表現です。" },
+    ],
+  },
+  {
+    question: "「うるさい」をどう言いますか？",
+    options: [
+      { text: "うるさい", region: "標準語", explanation: "標準的な「うるさい」の言い方です。" },
+      { text: "やかましい", region: "関西弁", explanation: "関西地方で使われる「うるさい」の表現です。" },
+      { text: "やっかい", region: "東北弁", explanation: "東北地方で使われる「うるさい」の方言です。" },
+      { text: "やかましゃー", region: "沖縄弁", explanation: "沖縄で使われる「うるさい」の表現です。" },
+      { text: "うるさか", region: "九州弁", explanation: "九州地方で使われる「うるさい」の表現です。" },
+    ],
+  },
+  {
+    question: "「頑張って」をどう言いますか？",
+    options: [
+      { text: "がんばって", region: "標準語", explanation: "標準的な「頑張って」の言い方です。" },
+      { text: "ふぁいちーん", region: "沖縄弁", explanation: "沖縄で使われる「頑張って」の表現です。" },
+      { text: "しっかりせえ", region: "関西弁", explanation: "関西地方で使われる「頑張って」の表現の一つです。" },
+      { text: "だっちゃか", region: "東北弁", explanation: "岩手で使われる「頑張って」の方言です。" },
+      { text: "ばってん", region: "九州弁", explanation: "熊本を中心とした九州地方で使われる「頑張って」の表現です。" },
+    ],
+  },
+  {
+    question: "「もう少し」をどう言いますか？",
+    options: [
+      { text: "もうすこし", region: "標準語", explanation: "標準的な「もう少し」の言い方です。" },
+      { text: "もーちょい", region: "関西弁", explanation: "関西地方で使われる「もう少し」の表現です。" },
+      { text: "もっつぁき", region: "東北弁", explanation: "東北地方で使われる「もう少し」の方言です。" },
+      { text: "いっぴんぐゎー", region: "沖縄弁", explanation: "沖縄で使われる「もう少し」の表現です。" },
+      { text: "もっこり", region: "九州弁", explanation: "九州地方の一部で使われる「もう少し」の表現です。" },
+    ],
+  },
+];
+        const regions = {
+            "標準語": 0,
+            "関西弁": 0,
+            "東北弁": 0,
+            "沖縄弁": 0,
+            "九州弁": 0,
+        };
+
+        function ProgressBar({ current, total }) {
+            const percentage = (current / total) * 100;
+            return (
+                <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                    <div 
+                        className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-in-out" 
+                        style={{ width: `${percentage}%` }}
+                    ></div>
+                </div>
+            );
+        }
+
+        function QuizApp() {
+            const [currentQuestion, setCurrentQuestion] = React.useState(0);
+            const [selectedOption, setSelectedOption] = React.useState('');
+            const [quizEnded, setQuizEnded] = React.useState(false);
+            const [result, setResult] = React.useState({});
+            const [showExplanation, setShowExplanation] = React.useState(false);
+
+            const handleOptionChange = (value) => {
+                setSelectedOption(value);
+                setShowExplanation(true);
+            };
+
+            const handleNextQuestion = () => {
+                if (selectedOption) {
+                    const selectedRegion = quizData[currentQuestion].options.find(option => option.text === selectedOption).region;
+                    regions[selectedRegion] = (regions[selectedRegion] || 0) + 1;
+
+                    if (currentQuestion < quizData.length - 1) {
+                        setCurrentQuestion(currentQuestion + 1);
+                        setSelectedOption('');
+                        setShowExplanation(false);
+                    } else {
+                        endQuiz();
+                    }
+                }
+            };
+
+            const endQuiz = () => {
+                const totalResponses = Object.values(regions).reduce((a, b) => a + b, 0);
+                const percentages = {};
+                for (const [region, count] of Object.entries(regions)) {
+                    percentages[region] = Math.round((count / totalResponses) * 100);
+                }
+                setResult(percentages);
+                setQuizEnded(true);
+            };
+
+            return (
+                <div className="bg-white rounded-lg shadow-md p-6 max-w-md w-full">
+                    <h1 className="text-2xl font-bold mb-4 text-center">日本語方言クイズ</h1>
+                    {!quizEnded ? (
+                        <>
+                            <ProgressBar current={currentQuestion + 1} total={quizData.length} />
+                            <p className="mb-4 font-semibold">{quizData[currentQuestion].question}</p>
+                            <div className="space-y-2">
+                                {quizData[currentQuestion].options.map((option, index) => (
+                                    <label key={index} className="flex items-center space-x-2 cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            value={option.text}
+                                            checked={selectedOption === option.text}
+                                            onChange={() => handleOptionChange(option.text)}
+                                            className="form-radio text-blue-600"
+                                        />
+                                        <span>{option.text}</span>
+                                    </label>
+                                ))}
+                            </div>
+                            {showExplanation && (
+                                <p className="mt-4 text-sm italic text-gray-600">
+                                    {quizData[currentQuestion].options.find(option => option.text === selectedOption).explanation}
+                                </p>
+                            )}
+                            <button 
+                                onClick={handleNextQuestion} 
+                                disabled={!selectedOption}
+                                className="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition duration-200"
+                            >
+                                {currentQuestion < quizData.length - 1 ? '次へ' : '結果を見る'}
+                            </button>
+                        </>
+                    ) : (
+                        <div>
+                            <p className="font-semibold mb-4">あなたの方言の割合:</p>
+                            {Object.entries(result).map(([region, percentage]) => (
+                                <div key={region} className="flex justify-between items-center mb-2">
+                                    <span>{region}:</span>
+                                    <span className="font-semibold">{percentage}%</span>
+                                </div>
+                            ))}
+                            <p className="mt-6 font-semibold text-center">
+                                最も高い割合の方言は 
+                                <span className="text-blue-600">
+                                    {Object.entries(result).reduce((a, b) => a[1] > b[1] ? a : b)[0]}
+                                </span> 
+                                です。
+                            </p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<QuizApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
