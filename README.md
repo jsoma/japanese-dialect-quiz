@@ -2,7 +2,7 @@
 
 A demonstration of using Claude artifacts to write your own [interactive dialect quiz](https://www.nytimes.com/interactive/2014/upshot/dialect-quiz-map.html). You can see it in action [right here](https://jsoma.github.io/japanese-dialect-quiz).
 
-## The conversation
+# The conversation to generate the app
 
 **🐛 User:** I want to build a react app that is a Japanese dialect quiz. It is a 10-question multiple-choice quiz that asks what word you would to describe certain things, and shows what region you are from based on that.
 
